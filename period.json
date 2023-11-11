@@ -1,0 +1,24 @@
+{  
+  "domain_id": "domain_id",  
+  "policy_assignment_id": "637c6b2e6b647c4d313d9719",  
+  "policy_assignment_name": "period-policy-assignment",  
+  "function_urn": "urn:fss:region_1:123456789:function:default:test-custom-policyassignment:latest",  
+  "trigger_type": "period",  
+  "evaluation_time": 1669098286719,  
+  "evaluation_hash": "3bf8ecaeb0864feb98639080aea5c7d9",  
+  "rule_parameter": {},  
+  "invoking_event": {  
+    "id": "domain_id",  
+    "name": "Account",  
+    "provider": null,  
+    "type": null,  
+    "tags": null,  
+    "created": null,  
+    "updated": null,  
+    "properties": null,  
+    "ep_id": null,  
+    "project_id": null,  
+    "region_id": "global",  
+    "provisioning_state": null  
+  }  
+}
