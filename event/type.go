@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"errors"
+	"log/slog"
 	"net/http"
 	"time"
 )
@@ -47,6 +48,14 @@ type ConfigPolicyResource struct {
 	ResourceName     *string `json:"resource_name,omitempty"`
 	ResourceProvider *string `json:"resource_provider,omitempty"`
 	ResourceType     *string `json:"resource_type,omitempty"`
+}
+
+type PeriodReportResource struct {
+	ResourceId       string
+	ResourceName     string
+	ResourceProvider string
+	ResourceType     string
+	ComplianceStatus string
 }
 
 type ConfigComplianceStatuesReportRequest struct {
@@ -98,16 +107,19 @@ func (e *ConfigEvent) ReportComplianceStatus(status, token string) error {
 	return errors.New(result.Status)
 }
 
-func (e *ConfigEvent) PeriodReportComplianceStatus(status, token string) error {
+func (e *ConfigEvent) PeriodReportComplianceStatus(resource *PeriodReportResource, token string) error {
 	var policyResrouce ConfigPolicyResource
 	var complianceRequestData ConfigComplianceStatuesReportRequest
 	reportURL := ConfigEndpoint + "/v1/resource-manager/domains/" + *e.DomainId + "/policy-states"
 	policyResrouce.DomainId = e.DomainId
 	policyResrouce.RegionId = e.InvokingEvent.RegionId
-	policyResrouce.ResourceName = e.InvokingEvent.Name
+	policyResrouce.ResourceName = &resource.ResourceName
+	policyResrouce.ResourceId = &resource.ResourceId
+	policyResrouce.ResourceProvider = &resource.ResourceProvider
+	policyResrouce.ResourceType = &resource.ResourceType
 	complianceRequestData.PolicyResource = policyResrouce
 	complianceRequestData.TriggerType = e.TriggerType
-	complianceRequestData.ComplianceState = status
+	complianceRequestData.ComplianceState = resource.ComplianceStatus
 	complianceRequestData.PolicyAssignmentId = e.AssignmentId
 	complianceRequestData.PolicyAssignmentName = e.AssignmentName
 	complianceRequestData.FunctionURN = e.FunctionURN
@@ -115,18 +127,23 @@ func (e *ConfigEvent) PeriodReportComplianceStatus(status, token string) error {
 	complianceRequestData.EvalutationHash = e.EvaluationHash
 	reqData, err := json.Marshal(complianceRequestData)
 	if err != nil {
+		slog.Info("Error marshal request")
+		slog.Info(err.Error())
 		return err
 	}
 	req, err := http.NewRequest(http.MethodPost, reportURL, bytes.NewReader(reqData))
 	if err != nil {
+		slog.Info("Error building request")
 		return err
 	}
 	req.Header.Add("X-Auth-Token", token)
 	result, err := http.DefaultClient.Do(req)
 	if err != nil {
+		slog.Info("Error sending request")
 		return err
 	}
 	if result.StatusCode == http.StatusOK {
+		slog.Info("Error http request", "code", result.StatusCode, "msg", result.Body)
 		return nil
 	}
 	return errors.New(result.Status)
