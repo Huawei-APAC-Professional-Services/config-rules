@@ -15,39 +15,39 @@ const ConfigEndpoint string = "https://rms.myhuaweicloud.com"
 
 // Doc: https://support.huaweicloud.com/intl/en-us/usermanual-rms/rms_05_0506.html
 type ConfigEvent struct {
-	DomainId       *string                      `json:"domain_id,omitempty"`
-	AssignmentId   *string                      `json:"policy_assignment_id,omitempty"`
-	AssignmentName *string                      `json:"policy_assignment_name,omitempty"`
-	FunctionURN    *string                      `json:"function_urn,omitempty"`
-	TriggerType    *string                      `json:"trigger_type,omitempty"`
-	EvaluationTime int64                        `json:"evaluation_time,omitempty"`
-	EvaluationHash *string                      `json:"evaluation_hash,omitempty"`
-	RuleParameter  map[string]map[string]string `json:"rule_parameter,omitempty"`
-	InvokingEvent  ConfigInvokingEvent          `json:"invoking_event,omitempty"`
+	DomainId       *string                      `json:"domain_id"`
+	AssignmentId   *string                      `json:"policy_assignment_id"`
+	AssignmentName *string                      `json:"policy_assignment_name"`
+	FunctionURN    *string                      `json:"function_urn"`
+	TriggerType    *string                      `json:"trigger_type"`
+	EvaluationTime int64                        `json:"evaluation_time"`
+	EvaluationHash *string                      `json:"evaluation_hash"`
+	RuleParameter  map[string]map[string]string `json:"rule_parameter"`
+	InvokingEvent  ConfigInvokingEvent          `json:"invoking_event"`
 }
 
 type ConfigInvokingEvent struct {
-	Id                *string           `json:"id,omitempty"`
-	Name              *string           `json:"name,omitempty"`
-	Provider          *string           `json:"provider,omitempty"`
-	Type              *string           `json:"type,omitempty"`
-	Tags              map[string]string `json:"tags,omitempty"`
-	CreateTime        time.Time         `json:"created,omitempty"`
-	UpdateTime        time.Time         `json:"updated,omitempty"`
-	Properties        interface{}       `json:"properties,omitempty"`
-	EP_Id             *string           `json:"ep_id,omitempty"`
-	ProjectId         *string           `json:"project_id,omitempty"`
-	RegionId          *string           `json:"region_id,omitempty"`
-	ProvisioningState *string           `json:"provisioning_state,omitempty"`
+	Id                *string           `json:"id"`
+	Name              *string           `json:"name"`
+	Provider          *string           `json:"provider"`
+	Type              *string           `json:"type"`
+	Tags              map[string]string `json:"tags"`
+	CreateTime        time.Time         `json:"created"`
+	UpdateTime        time.Time         `json:"updated"`
+	Properties        interface{}       `json:"properties"`
+	EP_Id             *string           `json:"ep_id"`
+	ProjectId         *string           `json:"project_id"`
+	RegionId          *string           `json:"region_id"`
+	ProvisioningState *string           `json:"provisioning_state"`
 }
 
 type ConfigPolicyResource struct {
-	DomainId         *string `json:"domain_id,omitempty"`
-	RegionId         *string `json:"region_id,omitempty"`
-	ResourceId       *string `json:"resource_id,omitempty"`
-	ResourceName     *string `json:"resource_name,omitempty"`
-	ResourceProvider *string `json:"resource_provider,omitempty"`
-	ResourceType     *string `json:"resource_type,omitempty"`
+	DomainId         *string `json:"domain_id"`
+	RegionId         *string `json:"region_id"`
+	ResourceId       *string `json:"resource_id"`
+	ResourceName     *string `json:"resource_name"`
+	ResourceProvider *string `json:"resource_provider"`
+	ResourceType     *string `json:"resource_type"`
 }
 
 type PeriodReportResource struct {
@@ -59,14 +59,14 @@ type PeriodReportResource struct {
 }
 
 type ConfigComplianceStatuesReportRequest struct {
-	PolicyResource       ConfigPolicyResource `json:"policy_resource,omitempty"`
-	TriggerType          *string              `json:"trigger_type,omitempty"`
-	ComplianceState      string               `json:"compliance_state,omitempty"`
-	PolicyAssignmentId   *string              `json:"policy_assignment_id,omitempty"`
-	PolicyAssignmentName *string              `json:"policy_assignment_name,omitempty"`
-	FunctionURN          *string              `json:"function_urn,omitempty"`
-	EvaluationTime       int64                `json:"evaluation_time,omitempty"`
-	EvalutationHash      *string              `json:"evaluation_hash,omitempty"`
+	PolicyResource       ConfigPolicyResource `json:"policy_resource"`
+	TriggerType          *string              `json:"trigger_type"`
+	ComplianceState      string               `json:"compliance_state"`
+	PolicyAssignmentId   *string              `json:"policy_assignment_id"`
+	PolicyAssignmentName *string              `json:"policy_assignment_name"`
+	FunctionURN          *string              `json:"function_urn"`
+	EvaluationTime       int64                `json:"evaluation_time"`
+	EvalutationHash      *string              `json:"evaluation_hash"`
 }
 
 // Report Compliance Status to RMS
@@ -111,7 +111,6 @@ func (e *ConfigEvent) PeriodReportComplianceStatus(resource *PeriodReportResourc
 	var policyResrouce ConfigPolicyResource
 	var complianceRequestData ConfigComplianceStatuesReportRequest
 	reportURL := ConfigEndpoint + "/v1/resource-manager/domains/" + *e.DomainId + "/policy-states"
-	slog.Info("Report Endpoint", "url", reportURL)
 	policyResrouce.DomainId = e.DomainId
 	policyResrouce.RegionId = e.InvokingEvent.RegionId
 	policyResrouce.ResourceName = &resource.ResourceName
@@ -126,7 +125,6 @@ func (e *ConfigEvent) PeriodReportComplianceStatus(resource *PeriodReportResourc
 	complianceRequestData.FunctionURN = e.FunctionURN
 	complianceRequestData.EvaluationTime = e.EvaluationTime
 	complianceRequestData.EvalutationHash = e.EvaluationHash
-	slog.Info("Begin Marshal")
 	reqData, err := json.Marshal(complianceRequestData)
 	if err != nil {
 		slog.Info("Error marshal request")
