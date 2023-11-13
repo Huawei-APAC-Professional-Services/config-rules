@@ -33,12 +33,12 @@ func (i *ConfigIAMClient) HasOnlyOneEnterpriseAdministrator() (bool, error) {
 	for _, v := range *groupqueryResult.Groups {
 		slog.Info("group info", v.Id, v.Name)
 	}
-	slog.Info("Access Group Id")
 	adminGroupId := (*groupqueryResult.Groups)[0].Id
-	slog.Info("Done Accessing Group Id")
 	groupusersResult, err := i.client.KeystoneListUsersForGroupByAdmin(&model.KeystoneListUsersForGroupByAdminRequest{GroupId: adminGroupId})
+	slog.Info("Check user number")
 	if len(*groupusersResult.Users) <= 1 {
 		return true, nil
 	}
+	slog.Info("done checking user list")
 	return false, nil
 }
