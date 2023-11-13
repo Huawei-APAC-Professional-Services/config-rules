@@ -89,7 +89,7 @@ func (e *ConfigEvent) ReportComplianceStatus(status, token string) error {
 	complianceRequestData.FunctionURN = e.FunctionURN
 	complianceRequestData.EvaluationTime = e.EvaluationTime
 	complianceRequestData.EvalutationHash = e.EvaluationHash
-	fmt.Printf("%v", complianceRequestData)
+
 	reqData, err := json.Marshal(complianceRequestData)
 	if err != nil {
 		return err
@@ -127,6 +127,7 @@ func (e *ConfigEvent) PeriodReportComplianceStatus(resource *PeriodReportResourc
 	complianceRequestData.FunctionURN = e.FunctionURN
 	complianceRequestData.EvaluationTime = e.EvaluationTime
 	complianceRequestData.EvalutationHash = e.EvaluationHash
+	fmt.Printf("%v", complianceRequestData)
 	reqData, err := json.Marshal(complianceRequestData)
 	if err != nil {
 		slog.Info("Error marshal request")
