@@ -111,6 +111,7 @@ func (e *ConfigEvent) PeriodReportComplianceStatus(resource *PeriodReportResourc
 	var policyResrouce ConfigPolicyResource
 	var complianceRequestData ConfigComplianceStatuesReportRequest
 	reportURL := ConfigEndpoint + "/v1/resource-manager/domains/" + *e.DomainId + "/policy-states"
+	slog.Info("Report Endpoint", "url", reportURL)
 	policyResrouce.DomainId = e.DomainId
 	policyResrouce.RegionId = e.InvokingEvent.RegionId
 	policyResrouce.ResourceName = &resource.ResourceName
@@ -125,6 +126,7 @@ func (e *ConfigEvent) PeriodReportComplianceStatus(resource *PeriodReportResourc
 	complianceRequestData.FunctionURN = e.FunctionURN
 	complianceRequestData.EvaluationTime = e.EvaluationTime
 	complianceRequestData.EvalutationHash = e.EvaluationHash
+	slog.Info("Begin Marshal")
 	reqData, err := json.Marshal(complianceRequestData)
 	if err != nil {
 		slog.Info("Error marshal request")
