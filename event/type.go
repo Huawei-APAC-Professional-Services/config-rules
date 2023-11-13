@@ -60,6 +60,7 @@ type ConfigComplianceStatuesReportRequest struct {
 	EvalutationHash      string               `json:"evaluation_hash"`
 }
 
+// Report Compliance Status to RMS
 func (e *ConfigEvent) ReportComplianceStatus(status, functionURN, token string) error {
 	var policyResrouce ConfigPolicyResource
 	var complianceRequestData ConfigComplianceStatuesReportRequest
