@@ -61,7 +61,7 @@ type ConfigComplianceStatuesReportRequest struct {
 }
 
 // Report Compliance Status to RMS
-func (e *ConfigEvent) ReportComplianceStatus(status, functionURN, token string) error {
+func (e *ConfigEvent) ReportComplianceStatus(status, token string) error {
 	var policyResrouce ConfigPolicyResource
 	var complianceRequestData ConfigComplianceStatuesReportRequest
 	reportURL := ConfigEndpoint + "/v1/resource-manager/domains/" + e.DomainId + "/policy-states"
@@ -76,7 +76,7 @@ func (e *ConfigEvent) ReportComplianceStatus(status, functionURN, token string) 
 	complianceRequestData.ComplianceState = status
 	complianceRequestData.PolicyAssignmentId = e.AssignmentId
 	complianceRequestData.PolicyAssignmentName = e.AssignmentName
-	complianceRequestData.FunctionURN = functionURN
+	complianceRequestData.FunctionURN = e.FunctionURN
 	complianceRequestData.EvaluationTime = e.EvaluationTime
 	complianceRequestData.EvalutationHash = e.EvaluationHash
 	reqData, err := json.Marshal(complianceRequestData)
