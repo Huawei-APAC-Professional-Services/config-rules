@@ -14,15 +14,15 @@ const ConfigEndpoint string = "https://rms.myhuaweicloud.com"
 
 // Doc: https://support.huaweicloud.com/intl/en-us/usermanual-rms/rms_05_0506.html
 type ConfigEvent struct {
-	DomainId       string              `json:"domain_id"`
-	AssignmentId   string              `json:"policy_assignment_id"`
-	AssignmentName string              `json:"policy_assignment_name"`
-	FunctionURN    string              `json:"function_urn"`
-	TriggerType    string              `json:"trigger_type"`
-	EvaluationTime int64               `json:"evaluation_time"`
-	EvaluationHash string              `json:"evaluation_hash"`
-	RuleParameter  map[string]string   `json:"rule_parameter"`
-	InvokingEvent  ConfigInvokingEvent `json:"invoking_event"`
+	DomainId       string                 `json:"domain_id"`
+	AssignmentId   string                 `json:"policy_assignment_id"`
+	AssignmentName string                 `json:"policy_assignment_name"`
+	FunctionURN    string                 `json:"function_urn"`
+	TriggerType    string                 `json:"trigger_type"`
+	EvaluationTime int64                  `json:"evaluation_time"`
+	EvaluationHash string                 `json:"evaluation_hash"`
+	RuleParameter  map[string]interface{} `json:"rule_parameter"`
+	InvokingEvent  ConfigInvokingEvent    `json:"invoking_event"`
 }
 
 type ConfigInvokingEvent struct {
