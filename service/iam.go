@@ -13,9 +13,9 @@ type ConfigIAMClient struct {
 	client *iam.IamClient
 }
 
-func NewIAMClient(ak, sk, region string) *ConfigIAMClient {
+func NewIAMClient(ak, sk, domainId, region string) *ConfigIAMClient {
 	var client *ConfigIAMClient
-	auth := global.NewCredentialsBuilder().WithAk(ak).WithSk(sk).Build()
+	auth := global.NewCredentialsBuilder().WithAk(ak).WithSk(sk).WithDomainId(domainId).Build()
 	client.client = iam.NewIamClient(iam.IamClientBuilder().WithRegion(hwregion.ValueOf(region)).WithCredential(auth).Build())
 	return client
 }
