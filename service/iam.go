@@ -27,16 +27,15 @@ func (i *ConfigIAMClient) HasOnlyOneEnterpriseAdministrator() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	slog.Info("Check admin group id")
 	if len(*groupqueryResult.Groups) != 1 {
 		return false, errors.New("there is more than one admin group")
 	}
-	slog.Info("Get admin group id")
 	for _, v := range *groupqueryResult.Groups {
 		slog.Info("group info", v.Id, v.Name)
 	}
-	slog.Info("done for fetching groups info")
+	slog.Info("Access Group Id")
 	adminGroupId := (*groupqueryResult.Groups)[0].Id
+	slog.Info("Done Accessing Group Id")
 	groupusersResult, err := i.client.KeystoneListUsersForGroupByAdmin(&model.KeystoneListUsersForGroupByAdminRequest{GroupId: adminGroupId})
 	if len(*groupusersResult.Users) <= 1 {
 		return true, nil
