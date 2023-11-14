@@ -15,7 +15,7 @@ type ConfigEvent struct {
 	AssignmentName *string                      `json:"policy_assignment_name"`
 	FunctionURN    *string                      `json:"function_urn"`
 	TriggerType    *string                      `json:"trigger_type"`
-	EvaluationTime *string                      `json:"evaluation_time"`
+	EvaluationTime int64                        `json:"evaluation_time"`
 	EvaluationHash *string                      `json:"evaluation_hash"`
 	RuleParameter  map[string]map[string]string `json:"rule_parameter"`
 	InvokingEvent  ConfigInvokingEvent          `json:"invoking_event"`

@@ -1,6 +1,8 @@
 package service
 
 import (
+	"strconv"
+
 	"github.com/Huawei-APAC-Professional-Services/config-rules/event"
 	"github.com/huaweicloud/huaweicloud-sdk-go-v3/core/auth/global"
 	config "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/config/v1"
@@ -31,7 +33,7 @@ func (c *ConfigClient) UpdateComplianceStatus(event *event.ConfigEvent, policyRe
 				ComplianceState:      configModel.GetPolicyStateRequestBodyComplianceStateEnum().COMPLIANT,
 				PolicyAssignmentId:   *event.AssignmentId,
 				PolicyAssignmentName: event.AssignmentName,
-				EvaluationTime:       *event.EvaluationTime,
+				EvaluationTime:       strconv.FormatInt(event.EvaluationTime, 10),
 				EvaluationHash:       *event.EvaluationHash,
 			},
 		}
@@ -44,7 +46,7 @@ func (c *ConfigClient) UpdateComplianceStatus(event *event.ConfigEvent, policyRe
 				ComplianceState:      configModel.GetPolicyStateRequestBodyComplianceStateEnum().NON_COMPLIANT,
 				PolicyAssignmentId:   *event.AssignmentId,
 				PolicyAssignmentName: event.AssignmentName,
-				EvaluationTime:       *event.EvaluationTime,
+				EvaluationTime:       strconv.FormatInt(event.EvaluationTime, 10),
 				EvaluationHash:       *event.EvaluationHash,
 			},
 		}
