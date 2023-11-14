@@ -2,6 +2,7 @@ package service
 
 import (
 	"errors"
+	"log/slog"
 
 	"github.com/Huawei-APAC-Professional-Services/config-rules/event"
 	configModel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/config/v1/model"
@@ -21,16 +22,19 @@ func (c *ConfigClient) HasOnlyOneEnterpriseAdministrator(event *event.ConfigEven
 	if err != nil {
 		return nil, false, err
 	}
+	slog.Info("Finished List Groups")
 	comlianceResource.ResourceName = &adminGroupName
 	if len(*groupqueryResult.Groups) != 1 {
 		return nil, false, errors.New("there is more than one admin group")
 	}
 	adminGroupId := (*groupqueryResult.Groups)[0].Id
+	slog.Info("Get Admin Group Id", "adminId", adminGroupId)
 	comlianceResource.ResourceId = &adminGroupId
 	groupusersResult, err := c.iam.KeystoneListUsersForGroupByAdmin(&model.KeystoneListUsersForGroupByAdminRequest{GroupId: adminGroupId})
 	if err != nil {
 		return nil, false, err
 	}
+	slog.Info("Finished Listing Users")
 	if len(*groupusersResult.Users) <= 1 {
 		return &comlianceResource, true, nil
 	} else {
