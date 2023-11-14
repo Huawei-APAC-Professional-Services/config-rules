@@ -12,7 +12,9 @@ import (
 func (c *ConfigClient) HasOnlyOneEnterpriseAdministrator(event *event.ConfigEvent) (*configModel.PolicyResource, bool, error) {
 	provider := "iam"
 	resourceType := "groups"
+	slog.Info("define policy resource")
 	comlianceResource := configModel.PolicyResource{}
+	slog.Info("Finished")
 	comlianceResource.DomainId = event.DomainId
 	comlianceResource.RegionId = event.InvokingEvent.RegionId
 	comlianceResource.ResourceProvider = &provider
