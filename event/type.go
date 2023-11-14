@@ -86,7 +86,7 @@ func (c *ConfigComplianceStatuesReportRequest) UpdatePolicyState(token string) e
 	if err != nil {
 		return err
 	}
-	req.Header.Add("X-Security-Token", token)
+	req.Header.Add("x-auth-token", token)
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		slog.Info(err.Error())
