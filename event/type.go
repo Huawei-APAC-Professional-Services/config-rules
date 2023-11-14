@@ -73,7 +73,7 @@ type ConfigComplianceStatuesReportRequest struct {
 }
 
 func (c *ConfigComplianceStatuesReportRequest) UpdatePolicyState(token string) error {
-	endpoint := "https://rms.myhuaweicloud.com/v1/resource-manager/domains/https://rms.myhuaweicloud.com/v1/resource-manager/domains/" + *c.PolicyResource.DomainId + "/policy-states"
+	endpoint := "https://rms.myhuaweicloud.com/v1/resource-manager/domains/" + *c.PolicyResource.DomainId + "/policy-states"
 	slog.Info("marshar policy state body")
 	body, err := json.Marshal(c)
 	if err != nil {
