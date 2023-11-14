@@ -68,7 +68,7 @@ type ConfigComplianceStatuesReportRequest struct {
 	PolicyAssignmentId   *string              `json:"policy_assignment_id"`
 	PolicyAssignmentName *string              `json:"policy_assignment_name"`
 	FunctionURN          *string              `json:"function_urn"`
-	EvaluationTime       int64                `json:"evaluation_time"`
+	EvaluationTime       string               `json:"evaluation_time"`
 	EvalutationHash      *string              `json:"evaluation_hash"`
 }
 
