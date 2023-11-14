@@ -1,12 +1,6 @@
 package event
 
 import (
-	"bytes"
-	"encoding/json"
-	"errors"
-	"fmt"
-	"log/slog"
-	"net/http"
 	"time"
 )
 
@@ -21,7 +15,7 @@ type ConfigEvent struct {
 	AssignmentName *string                      `json:"policy_assignment_name"`
 	FunctionURN    *string                      `json:"function_urn"`
 	TriggerType    *string                      `json:"trigger_type"`
-	EvaluationTime int64                        `json:"evaluation_time"`
+	EvaluationTime *string                      `json:"evaluation_time"`
 	EvaluationHash *string                      `json:"evaluation_hash"`
 	RuleParameter  map[string]map[string]string `json:"rule_parameter"`
 	InvokingEvent  ConfigInvokingEvent          `json:"invoking_event"`
@@ -68,86 +62,4 @@ type ConfigComplianceStatuesReportRequest struct {
 	FunctionURN          *string              `json:"function_urn"`
 	EvaluationTime       int64                `json:"evaluation_time"`
 	EvalutationHash      *string              `json:"evaluation_hash"`
-}
-
-// Report Compliance Status to RMS
-func (e *ConfigEvent) ReportComplianceStatus(status, token string) error {
-	var policyResrouce ConfigPolicyResource
-	var complianceRequestData ConfigComplianceStatuesReportRequest
-	reportURL := ConfigEndpoint + "/v1/resource-manager/domains/" + *e.DomainId + "/policy-states"
-	policyResrouce.DomainId = e.DomainId
-	policyResrouce.RegionId = e.InvokingEvent.RegionId
-	policyResrouce.ResourceId = e.InvokingEvent.Id
-	policyResrouce.ResourceName = e.InvokingEvent.Name
-	policyResrouce.ResourceProvider = e.InvokingEvent.Provider
-	policyResrouce.ResourceType = e.InvokingEvent.Type
-	complianceRequestData.PolicyResource = policyResrouce
-	complianceRequestData.TriggerType = e.TriggerType
-	complianceRequestData.ComplianceState = status
-	complianceRequestData.PolicyAssignmentId = e.AssignmentId
-	complianceRequestData.PolicyAssignmentName = e.AssignmentName
-	complianceRequestData.FunctionURN = e.FunctionURN
-	complianceRequestData.EvaluationTime = e.EvaluationTime
-	complianceRequestData.EvalutationHash = e.EvaluationHash
-
-	reqData, err := json.Marshal(complianceRequestData)
-	if err != nil {
-		return err
-	}
-	req, err := http.NewRequest(http.MethodPost, reportURL, bytes.NewReader(reqData))
-	if err != nil {
-		return err
-	}
-	req.Header.Add("X-Auth-Token", token)
-	result, err := http.DefaultClient.Do(req)
-	if err != nil {
-		return err
-	}
-	if result.StatusCode == http.StatusOK {
-		return nil
-	}
-	return errors.New(result.Status)
-}
-
-func (e *ConfigEvent) PeriodReportComplianceStatus(resource *PeriodReportResource, token string) error {
-	var policyResrouce ConfigPolicyResource
-	var complianceRequestData ConfigComplianceStatuesReportRequest
-	reportURL := ConfigEndpoint + "/v1/resource-manager/domains/" + *e.DomainId + "/policy-states"
-	policyResrouce.DomainId = e.DomainId
-	policyResrouce.RegionId = e.InvokingEvent.RegionId
-	policyResrouce.ResourceName = &resource.ResourceName
-	policyResrouce.ResourceId = &resource.ResourceId
-	policyResrouce.ResourceProvider = &resource.ResourceProvider
-	policyResrouce.ResourceType = &resource.ResourceType
-	complianceRequestData.PolicyResource = policyResrouce
-	complianceRequestData.TriggerType = e.TriggerType
-	complianceRequestData.ComplianceState = resource.ComplianceStatus
-	complianceRequestData.PolicyAssignmentId = e.AssignmentId
-	complianceRequestData.PolicyAssignmentName = e.AssignmentName
-	complianceRequestData.FunctionURN = e.FunctionURN
-	complianceRequestData.EvaluationTime = e.EvaluationTime
-	complianceRequestData.EvalutationHash = e.EvaluationHash
-	fmt.Printf("%v", complianceRequestData)
-	reqData, err := json.Marshal(complianceRequestData)
-	if err != nil {
-		slog.Info("Error marshal request")
-		slog.Info(err.Error())
-		return err
-	}
-	req, err := http.NewRequest(http.MethodPost, reportURL, bytes.NewReader(reqData))
-	if err != nil {
-		slog.Info("Error building request")
-		return err
-	}
-	req.Header.Add("X-Auth-Token", token)
-	result, err := http.DefaultClient.Do(req)
-	if err != nil {
-		slog.Info("Error sending request")
-		return err
-	}
-	if result.StatusCode == http.StatusOK {
-		slog.Info("Error http request", "code", result.StatusCode, "msg", result.Body)
-		return nil
-	}
-	return errors.New(result.Status)
 }

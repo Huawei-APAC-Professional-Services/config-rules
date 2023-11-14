@@ -4,7 +4,7 @@ go 1.21.0
 
 replace huaweicloud.com/go-runtime => ../go-runtime
 
-require github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.65
+require github.com/huaweicloud/huaweicloud-sdk-go-v3 v0.1.66
 
 require (
 	github.com/json-iterator/go v1.1.12 // indirect
