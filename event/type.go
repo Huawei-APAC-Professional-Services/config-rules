@@ -1,6 +1,12 @@
 package event
 
 import (
+	"bytes"
+	"encoding/json"
+	"errors"
+	"io"
+	"log/slog"
+	"net/http"
 	"time"
 )
 
@@ -53,6 +59,8 @@ type PeriodReportResource struct {
 	ComplianceStatus string
 }
 
+// https://rms.myhuaweicloud.com/v1/resource-manager/domains/{domain_id}/policy-states
+
 type ConfigComplianceStatuesReportRequest struct {
 	PolicyResource       ConfigPolicyResource `json:"policy_resource"`
 	TriggerType          *string              `json:"trigger_type"`
@@ -62,4 +70,34 @@ type ConfigComplianceStatuesReportRequest struct {
 	FunctionURN          *string              `json:"function_urn"`
 	EvaluationTime       int64                `json:"evaluation_time"`
 	EvalutationHash      *string              `json:"evaluation_hash"`
+}
+
+func (c *ConfigComplianceStatuesReportRequest) UpdatePolicyState(token string) error {
+	endpoint := "https://rms.myhuaweicloud.com/v1/resource-manager/domains/https://rms.myhuaweicloud.com/v1/resource-manager/domains/" + *c.PolicyResource.DomainId + "/policy-states"
+	slog.Info("marshar policy state body")
+	body, err := json.Marshal(c)
+	if err != nil {
+		slog.Error(err.Error())
+		return err
+	}
+	slog.Info("finish marshal policy state body")
+	slog.Info(string(body))
+	req, err := http.NewRequest(http.MethodPut, endpoint, bytes.NewReader(body))
+	if err != nil {
+		return err
+	}
+	req.Header.Add("X-Security-Token", token)
+	resp, err := http.DefaultClient.Do(req)
+	if err != nil {
+		slog.Info(err.Error())
+		return err
+	}
+	if resp.StatusCode != http.StatusOK {
+		slog.Info("Failed to update policy state")
+		defer resp.Body.Close()
+		respData, _ := io.ReadAll(resp.Body)
+		slog.Info(string(respData))
+		return errors.New(resp.Status)
+	}
+	return nil
 }

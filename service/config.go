@@ -10,11 +10,13 @@ import (
 	configModel "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/config/v1/model"
 	iam "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3"
 	hwregion "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/iam/v3/region"
+	vpc "github.com/huaweicloud/huaweicloud-sdk-go-v3/services/vpc/v2"
 )
 
 type ConfigClient struct {
 	config *config.ConfigClient
 	iam    *iam.IamClient
+	vpc    *vpc.VpcClient
 }
 
 func NewConfigClient(auth *global.Credentials, region string) *ConfigClient {
