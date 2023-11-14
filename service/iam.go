@@ -12,16 +12,16 @@ import (
 func (c *ConfigClient) HasOnlyOneEnterpriseAdministrator(event *event.ConfigEvent) (*configModel.PolicyResource, bool, error) {
 	provider := "iam"
 	resourceType := "groups"
-	slog.Info("define policy resource")
 	comlianceResource := configModel.PolicyResource{}
-	slog.Info("Finished")
 	comlianceResource.DomainId = event.DomainId
 	comlianceResource.RegionId = event.InvokingEvent.RegionId
 	comlianceResource.ResourceProvider = &provider
 	comlianceResource.ResourceType = &resourceType
 	var adminGroupName = "admin"
+	slog.Info("Starting List Groups")
 	groupqueryResult, err := c.iam.KeystoneListGroups(&model.KeystoneListGroupsRequest{Name: &adminGroupName})
 	if err != nil {
+		slog.Error("errof", "msg", err.Error())
 		return nil, false, err
 	}
 	slog.Info("Finished List Groups")
