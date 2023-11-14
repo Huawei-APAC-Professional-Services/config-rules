@@ -87,6 +87,7 @@ func (c *ConfigComplianceStatuesReportRequest) UpdatePolicyState(token string) e
 		return err
 	}
 	req.Header.Add("x-auth-token", token)
+	req.Header.Add("Content-Type", "application/json")
 	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		slog.Info(err.Error())
