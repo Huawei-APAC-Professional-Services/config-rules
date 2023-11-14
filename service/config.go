@@ -42,7 +42,7 @@ func (c *ConfigClient) UpdateComplianceStatus(event *event.ConfigEvent, policyRe
 	} else {
 		req = configModel.UpdatePolicyStateRequest{
 			Body: &configModel.PolicyStateRequestBody{
-				PolicyResource:       &configModel.PolicyResource{},
+				PolicyResource:       policyResource,
 				TriggerType:          configModel.GetPolicyStateRequestBodyTriggerTypeEnum().PERIOD,
 				ComplianceState:      configModel.GetPolicyStateRequestBodyComplianceStateEnum().NON_COMPLIANT,
 				PolicyAssignmentId:   *event.AssignmentId,
