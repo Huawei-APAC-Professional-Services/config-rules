@@ -1,6 +1,7 @@
 package service
 
 import (
+	"log/slog"
 	"strconv"
 
 	"github.com/Huawei-APAC-Professional-Services/config-rules/event"
@@ -51,6 +52,8 @@ func (c *ConfigClient) UpdateComplianceStatus(event *event.ConfigEvent, policyRe
 			},
 		}
 	}
+	slog.Info("evaluation result")
+	slog.Info(req.String())
 	_, err := c.config.UpdatePolicyState(&req)
 	if err != nil {
 		return err
