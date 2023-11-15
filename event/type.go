@@ -51,6 +51,7 @@ type ConfigPolicyResource struct {
 	ResourceType     *string `json:"resource_type"`
 }
 
+/*
 type PeriodReportResource struct {
 	ResourceId       string
 	ResourceName     string
@@ -58,6 +59,7 @@ type PeriodReportResource struct {
 	ResourceType     string
 	ComplianceStatus string
 }
+*/
 
 // https://rms.myhuaweicloud.com/v1/resource-manager/domains/{domain_id}/policy-states
 
